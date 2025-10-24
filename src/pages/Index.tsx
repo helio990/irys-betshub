@@ -67,7 +67,7 @@ export default function Index() {
       <footer className="border-t mt-16 py-8 bg-white/50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center text-sm text-gray-600">
-            <p className="mb-2">Powered by Ethereum Sepolia & Irys Network</p>
+            <p className="mb-2">Powered by Ethereum Sepolia, SOLANA & Irys Network</p>
             <p className="text-xs text-gray-500">All bets are immutable and permanently stored</p>
           </div>
         </div>
