@@ -138,6 +138,81 @@ function BetCard({
 
   return (
     <Card className="overflow-hidden">
+      <CardHeader className="bg-gradient-to-r from-cyan-50 to-teal-50">
+        <div className="flex items-start justify-between">
+          <div className="flex-1">
+            <CardTitle className="font-heading text-xl mb-2">{title}</CardTitle>
+            <CardDescription className="text-sm">{description}</CardDescription>
+          </div>
+          {settled ? (
+            <Badge variant="secondary" className="font-heading">Settled</Badge>
+          ) : canInvest ? (
+            <Badge className="font-heading bg-primary text-white">Open</Badge>
+          ) : (
+            <Badge variant="outline" className="font-heading">Closed</Badge>
+          )}
+        </div>
+      </CardHeader>
+
+      <CardContent className="pt-6 space-y-4">
+        <div className="grid grid-cols-2 gap-4 text-sm">
+          <div className="flex items-center gap-2">
+            <Clock className="w-4 h-4 text-gray-500" />
+            <div>
+              <p className="text-xs text-gray-500">Investment Deadline</p>
+              <p className="font-medium">{format(investmentDeadlineSec * 1000, 'MMM dd, yyyy HH:mm')}</p>
+            </div>
+          </div>
+          <div className="flex items-center gap-2">
+            <Clock className="w-4 h-4 text-gray-500" />
+            <div>
+              <p className="text-xs text-gray-500">Settlement Deadline</p>
+              <p className="font-medium">{format(settlementDeadlineSec * 1000, 'MMM dd, yyyy HH:mm')}</p>
+            </div>
+          </div>
+        </div>
+
+        <div className="space-y-3">
+          <h4 className="font-heading font-semibold text-sm">Outcomes</h4>
+          <div className="space-y-2">
+            {outcomes.map((outcome: string, index: number) => (
+              <OutcomeCard
+                key={index}
+                betId={betId}
+                outcomeIndex={index}
+                outcomeName={outcome}
+                isWinner={settled && Number(winningOutcomeIndex) === index}
+                canInvest={canInvest}
+                onInvest={() => onInvest(index)}
+                isSelected={selectedBet === betId && selectedOutcome === index}
+              />
+            ))}
+          </div>
+        </div>
+
+        {selectedBet === betId && canInvest && (
+          <div className="border-t pt-4 space-y-3">
+            <Input
+              type="number"
+              step="0.01"
+              placeholder="0.1"
+              value={investAmount}
+              onChange={(e) => setInvestAmount(e.target.value)}
+            />
+            <Button
+              onClick={handleInvest}
+              disabled={isPending || isConfirming || !investAmount}
+            >
+              {isPending || isConfirming ? 'Processing...' : 'Invest'}
+            </Button>
+          </div>
+        )}
+      </CardContent>
+    </Card>
+  );
+}
+
+// OutcomeCard must be outside BetCard
 function OutcomeCard({
   betId,
   outcomeIndex,
@@ -163,21 +238,12 @@ function OutcomeCard({
       } ${isWinner ? 'bg-green-50 border-green-500' : ''}`}
     >
       <div className="flex items-center justify-between mb-2">
-        <div className="flex items-center gap-2">
-          <span className="font-medium">{outcomeName}</span>
-          {isWinner && <Badge className="bg-green-600 text-xs">Winner</Badge>}
-        </div>
-        <span className="text-sm font-semibold">{parseFloat(pool).toFixed(4)} ETH</span>
+        <span>{outcomeName}</span>
+        <span>{parseFloat(pool).toFixed(4)} ETH</span>
       </div>
-
       {canInvest && (
-        <Button
-          variant={isSelected ? 'default' : 'outline'}
-          size="sm"
-          onClick={onInvest}
-          className="w-full font-heading"
-        >
-          {isSelected ? 'Selected' : 'Invest in this outcome'}
+        <Button onClick={onInvest}>
+          {isSelected ? 'Selected' : 'Invest'}
         </Button>
       )}
     </div>
