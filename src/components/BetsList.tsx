@@ -138,7 +138,9 @@ function BetCard({
 
   return (
     <Card className="overflow-hidden">
+<<<<<<< HEAD
       <CardHeader className="bg-gradient-to-r from-cyan-50 to-teal-50">
+
         <div className="flex items-start justify-between">
           <div className="flex-1">
             <CardTitle className="font-heading text-xl mb-2">{title}</CardTitle>
@@ -147,6 +149,7 @@ function BetCard({
           {settled ? (
             <Badge variant="secondary" className="font-heading">Settled</Badge>
           ) : canInvest ? (
+<<<<<<< HEAD
             <Badge className="font-heading bg-primary text-white">Open</Badge>
           ) : (
             <Badge variant="outline" className="font-heading">Closed</Badge>
